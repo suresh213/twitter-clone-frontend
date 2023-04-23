@@ -1,9 +1,41 @@
-import Head from "next/head";
-import Image from "next/image";
+import authService from "@/services/auth";
 import styles from "@/styles/Login.module.scss";
 import { logo } from "@/utils/constants";
+import Head from "next/head";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
+interface User {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
+  const router = useRouter();
+
+  const [user, setUser] = useState<User>({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    attribute: string
+  ) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [attribute]: event.target.value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    authService.login(user).then(() => {
+      router.push("/feed");
+    });
+  };
+
   return (
     <>
       <Head>
@@ -16,7 +48,7 @@ export default function Login() {
         </div>
         <div className={styles.login__auth}>
           <div className={styles.header}>Sign in to twitter</div>
-          <form className={styles.login__form}>
+          <form className={styles.login__form} onSubmit={handleSubmit}>
             <div className={styles.login__input}>
               <input
                 type="text"
@@ -25,6 +57,8 @@ export default function Login() {
                 placeholder="Username or mobile"
                 autoComplete="false"
                 required
+                value={user.email}
+                onChange={(event) => handleChange(event, "email")}
               />
             </div>
             <div className={styles.login__input}>
@@ -35,6 +69,7 @@ export default function Login() {
                 autoComplete="false"
                 required
                 placeholder="Password"
+                onChange={(event) => handleChange(event, "password")}
               />
             </div>
             <div className={styles.actions}>
