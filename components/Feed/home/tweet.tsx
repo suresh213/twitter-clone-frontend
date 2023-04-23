@@ -6,24 +6,10 @@ import {
   FaRetweet,
   FaRegShareSquare,
 } from "react-icons/fa";
-
-type Tweet = {
-  id: number;
-  author: string;
-  username: string;
-  time: string;
-  content: string;
-  avatar: string;
-  avatarAlt: string;
-  comments: number;
-  retweets: number;
-  likes: number;
-};
-
-type Tweets = Array<Tweet>;
+import { TweetType } from "../types";
 
 interface TweetProps {
-  tweet: Tweet;
+  tweet: TweetType;
 }
 
 const Tweet = ({ tweet }: TweetProps) => {
@@ -48,7 +34,7 @@ const Tweet = ({ tweet }: TweetProps) => {
     <div className={styles.tweet}>
       <div className={styles.tweet_profile_image}>
         <Image
-          src={tweet.avatar || ""}
+          src={tweet.author.avatar || ""}
           alt="Profile Image"
           width={100}
           height={100}
@@ -57,9 +43,9 @@ const Tweet = ({ tweet }: TweetProps) => {
       </div>
       <div className={styles.tweet_container}>
         <div className={styles.user_details_container}>
-          <span className={styles.name}>{tweet.author}</span>
-          <span className={styles.username}>@{tweet.username}</span>
-          <span className={styles.time}>{tweet.time}</span>
+          <span className={styles.name}>{tweet.author.name}</span>
+          <span className={styles.username}>@{tweet.author.username}</span>
+          <span className={styles.time}>{tweet.createdAt}</span>
         </div>
         <div className={styles.content}>
           <p>{formatText(tweet.content)}</p>

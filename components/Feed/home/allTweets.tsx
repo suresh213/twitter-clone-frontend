@@ -1,27 +1,15 @@
 import styles from "@/styles/Feed.module.scss";
 import Tweet from "./tweet";
-
-type TweetType = {
-  id: number;
-  author: string;
-  username: string;
-  time: string;
-  content: string;
-  avatar: string;
-  avatarAlt: string;
-  comments: number;
-  retweets: number;
-  likes: number;
-};
+import { TweetType, TweetsType } from "../types";
 
 type AllTweetProps = {
-  tweets: Array<TweetType>;
+  tweets: TweetsType;
 };
 
 const AllTweet = ({ tweets }: AllTweetProps) => {
   return (
     <div className={styles.all_tweet}>
-      {tweets.map((tweet: Tweet) => (
+      {tweets.map((tweet: TweetType) => (
         <Tweet key={tweet.id} tweet={tweet} />
       ))}
     </div>

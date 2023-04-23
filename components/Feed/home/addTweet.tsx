@@ -2,24 +2,10 @@ import styles from "@/styles/Feed.module.scss";
 import { avatars } from "@/utils/constants";
 import Image from "next/image";
 import { useState } from "react";
-
-type TweetType = {
-  id?: number;
-  author?: string;
-  username?: string;
-  time?: string;
-  content?: string;
-  avatar?: string;
-  avatarAlt?: string;
-  comments?: number;
-  retweets?: number;
-  likes?: number;
-};
-
-type Tweets = Array<TweetType>;
+import { TweetsType } from "../types";
 
 type AddTweetProps = {
-  tweets: Tweets;
+  tweets: TweetsType;
   setTweets: any;
 };
 
