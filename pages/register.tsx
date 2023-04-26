@@ -1,25 +1,31 @@
+import { getToken, localStorageMiddleware } from "@/middleware/localStorageMiddleware";
 import authService from "@/services/auth";
+import { agent } from "@/services/request";
 import styles from "@/styles/Register.module.scss";
 import { logo } from "@/utils/constants";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface User {
+  name: string;
   email: string;
   password: string;
-  mobileNumber: string;
 }
 
 export default function Register() {
   const router = useRouter();
 
   const [user, setUser] = useState<User>({
+    name: "",
     email: "",
     password: "",
-    mobileNumber: "",
   });
+
+  useEffect(() => {
+    if (getToken()) router.push("feed");
+  }, []);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -31,11 +37,14 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    authService.register(user).then(() => {
-      router.push("/feed");
-    });
+    try {
+      await authService.register(user).then((res) => {
+        localStorageMiddleware(res.data.data);
+        router.push("/feed");
+      });
+    } catch (err) {}
   };
 
   return (
@@ -54,34 +63,36 @@ export default function Register() {
             <div className={styles.register__input}>
               <input
                 type="text"
-                className={styles.username__input}
-                name="username"
-                placeholder="Username or mobile"
+                className={styles.input}
+                name="Name"
+                placeholder="Name"
                 autoComplete="false"
                 required
+                value={user.name}
+                onChange={(event) => handleChange(event, "name")}
+              />
+            </div>
+            <div className={styles.register__input}>
+              <input
+                type="text"
+                className={styles.input}
+                name="email"
+                autoComplete="false"
+                required
+                placeholder="Email"
                 value={user.email}
                 onChange={(event) => handleChange(event, "email")}
               />
             </div>
             <div className={styles.register__input}>
               <input
-                type="text"
-                className={styles.password__input}
-                name="mobilenumber"
-                autoComplete="false"
-                required
-                placeholder="Mobile number"
-                onChange={(event) => handleChange(event, "mobileNumber")}
-              />
-            </div>
-            <div className={styles.register__input}>
-              <input
                 type="password"
-                className={styles.password__input}
+                className={styles.input}
                 name="password"
                 autoComplete="false"
                 required
                 placeholder="Password"
+                value={user.password}
                 onChange={(event) => handleChange(event, "password")}
               />
             </div>

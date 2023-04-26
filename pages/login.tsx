@@ -1,10 +1,14 @@
+import {
+  getToken,
+  localStorageMiddleware,
+} from "@/middleware/localStorageMiddleware";
 import authService from "@/services/auth";
 import styles from "@/styles/Login.module.scss";
 import { logo } from "@/utils/constants";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface User {
   email: string;
@@ -19,6 +23,10 @@ export default function Login() {
     password: "",
   });
 
+  useEffect(() => {
+    if (getToken()) router.push("feed");
+  }, []);
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     attribute: string
@@ -29,11 +37,14 @@ export default function Login() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    authService.login(user).then(() => {
-      router.push("/feed");
-    });
+    try {
+      await authService.login(user).then((res) => {
+        localStorageMiddleware(res.data.data);
+        router.push("/feed");
+      });
+    } catch (err) {}
   };
 
   return (
@@ -52,7 +63,7 @@ export default function Login() {
             <div className={styles.login__input}>
               <input
                 type="text"
-                className={styles.username__input}
+                className={styles.input}
                 name="username"
                 placeholder="Username or mobile"
                 autoComplete="false"
@@ -64,11 +75,12 @@ export default function Login() {
             <div className={styles.login__input}>
               <input
                 type="password"
-                className={styles.password__input}
+                className={styles.input}
                 name="password"
                 autoComplete="false"
                 required
                 placeholder="Password"
+                value={user.password}
                 onChange={(event) => handleChange(event, "password")}
               />
             </div>
