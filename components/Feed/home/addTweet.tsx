@@ -1,8 +1,9 @@
+import tweetService from "@/services/tweets";
 import styles from "@/styles/Feed.module.scss";
-import { avatars } from "@/utils/constants";
 import Image from "next/image";
 import { useState } from "react";
 import { TweetsType } from "../types";
+import { getUser } from "@/middleware/localStorageMiddleware";
 
 type AddTweetProps = {
   tweets: TweetsType;
@@ -11,17 +12,18 @@ type AddTweetProps = {
 
 const AddTweet = ({ tweets, setTweets }: AddTweetProps) => {
   const [newTweet, setNewTweet] = useState<string>("");
+  const user = getUser();
 
-  const postTweet = () => {
+  const postTweet = async () => {
     const data = {
       content: newTweet,
-      avatar: avatars[Math.floor(Math.random() * 4) + 1],
-      author: "Suresh",
-      username: "suresh",
-      time: "now",
     };
-    setTweets([data, ...tweets]);
-    setNewTweet("");
+
+    try {
+      const res = await tweetService.add(data);
+      setTweets([res.data.data, ...tweets]);
+      setNewTweet("");
+    } catch (err) {}
   };
 
   return (
@@ -29,7 +31,7 @@ const AddTweet = ({ tweets, setTweets }: AddTweetProps) => {
       <div className={styles.add_tweet}>
         <div className={styles.add_tweet_profile_image}>
           <Image
-            src="https://bit.ly/code-beast"
+            src={user?.avatar}
             alt="profile image"
             width={100}
             height={100}
