@@ -10,14 +10,10 @@ export default function App({ Component, pageProps }: AppProps) {
     setToken();
   }, []);
 
-  console.log(process.env.NEXT_GOOGLE_CLIENT_ID);
   return (
     <Suspense fallback={<Loader />}>
       <GoogleOAuthProvider
-        clientId={
-          process.env.NEXT_GOOGLE_CLIENT_ID ||
-          "72735544796-n509gprjg0lp1tlbsn7tuane0duanoho.apps.googleusercontent.com"
-        }
+        clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
       >
         <Component {...pageProps} />
       </GoogleOAuthProvider>
