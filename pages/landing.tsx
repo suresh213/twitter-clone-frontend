@@ -50,7 +50,14 @@ const steps = [
   },
 ];
 
-const stepIndexColors = ["#DAF8F8", "#F7F8DA", "#F8DAE6", "#DAF8DF"];
+const stepIndexColors = [
+  "#DAF8F8",
+  "#F7F8DA",
+  "#F8DAE6",
+  "#DAF8DF",
+  "#DAF8F8",
+  "#F7F8DA",
+];
 
 export default function Landing() {
   return (
