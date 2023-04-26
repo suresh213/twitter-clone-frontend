@@ -7,6 +7,7 @@ import {
   FaRegShareSquare,
 } from "react-icons/fa";
 import { TweetType } from "../types";
+import { relativeTime } from "@/utils/helpers";
 
 interface TweetProps {
   tweet: TweetType;
@@ -45,7 +46,7 @@ const Tweet = ({ tweet }: TweetProps) => {
         <div className={styles.user_details_container}>
           <span className={styles.name}>{tweet.author.name}</span>
           <span className={styles.username}>@{tweet.author.username}</span>
-          <span className={styles.time}>{tweet.createdAt}</span>
+          <span className={styles.time}>{relativeTime(tweet.createdAt)}</span>
         </div>
         <div className={styles.content}>
           <p>{formatText(tweet.content)}</p>
