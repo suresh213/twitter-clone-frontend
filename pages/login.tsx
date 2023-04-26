@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar/Navbar";
 import {
   getToken,
   localStorageMiddleware,
@@ -64,6 +65,7 @@ export default function Login() {
         <title>Login | Twitter</title>
         <meta name="description" content="Login to twitter" />
       </Head>
+      <Navbar />
       <main className={styles.login_container}>
         <div className={styles.login__content}>
           <Image src={logo} alt="logo" className={styles.logo} />
@@ -105,26 +107,10 @@ export default function Login() {
               <div className={styles.text}>or</div>
               <div className={styles.line}></div>
             </div>
-            {/* <button
-              type="button"
-              className={styles.google_button}
-              onClick={() => signIn()}
-            >
-              <Image
-                className={styles.google_icon}
-                src={
-                  "https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                }
-                width="100"
-                height="100"
-                alt="G"
-              />
-            </button> */}
             <GoogleLogin
               onSuccess={(credentialResponse) => {
                 handleGoogleLogin(credentialResponse);
               }}
-              onError={() => {}}
             />
             ;
           </form>
