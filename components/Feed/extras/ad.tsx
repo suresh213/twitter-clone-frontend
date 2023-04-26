@@ -5,7 +5,7 @@ import dahlia_logo from "@/assets/dahlia_logo.png";
 const Ad = () => {
   return (
     <div className={styles.ad_container}>
-      <p className={styles.ad__inform}>Promotion</p>
+      <p className={styles.ad__inform}>Promoted</p>
       <div className={styles.ad_title}>
         <Image src={dahlia_logo} alt="dahlia_logo" width={100} />
         <p>Dahlia</p>
