@@ -2,8 +2,8 @@ import { request } from "./request";
 
 const path = "/user/tweet";
 
-const getAll = async (): Promise<any> => {
-  return await request.get(`${path}`);
+const getAll = async (query = ""): Promise<any> => {
+  return await request.get(`${path}${query}`);
 };
 
 const add = async (data: any): Promise<any> => {

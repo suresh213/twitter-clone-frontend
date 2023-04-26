@@ -5,6 +5,7 @@ import {
 import authService from "@/services/auth";
 import styles from "@/styles/Login.module.scss";
 import { logo } from "@/utils/constants";
+import { GoogleLogin } from "@react-oauth/google";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -17,7 +18,6 @@ interface User {
 
 export default function Login() {
   const router = useRouter();
-
   const [user, setUser] = useState<User>({
     email: "",
     password: "",
@@ -44,6 +44,17 @@ export default function Login() {
         localStorageMiddleware(res.data.data);
         router.push("/feed");
       });
+    } catch (err) {}
+  };
+
+  const handleGoogleLogin = async (response: any) => {
+    try {
+      await authService
+        .authenticateWithGoogle({ credential: response?.credential })
+        .then((res) => {
+          localStorageMiddleware(res.data.data);
+          router.push("/feed");
+        });
     } catch (err) {}
   };
 
@@ -89,13 +100,16 @@ export default function Login() {
                 Login
               </button>
             </div>
-
             <div className={styles.divider}>
               <div className={styles.line}></div>
               <div className={styles.text}>or</div>
               <div className={styles.line}></div>
             </div>
-            <button type="button" className={styles.google_button}>
+            {/* <button
+              type="button"
+              className={styles.google_button}
+              onClick={() => signIn()}
+            >
               <Image
                 className={styles.google_icon}
                 src={
@@ -105,7 +119,14 @@ export default function Login() {
                 height="100"
                 alt="G"
               />
-            </button>
+            </button> */}
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                handleGoogleLogin(credentialResponse);
+              }}
+              onError={() => {}}
+            />
+            ;
           </form>
         </div>
       </main>
